@@ -2,9 +2,8 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 import { ProductType } from '../interfaces'
-import { createProduct } from '../slices/createSlice'
+import { createProduct } from '../slices/crudSlice'
 import { RootState } from '../store/store'
-import AddBtn from './AddBtn'
 
 const AddForm = () => {
 	const initialState = {
@@ -15,7 +14,7 @@ const AddForm = () => {
 	}
 	const [fields, setFields] = useState<ProductType>(initialState)
 	const { title, category, price, description } = fields
-	const { addSectionToggle } = useSelector((state: RootState) => state.create)
+	const { addSectionToggle } = useSelector((state: RootState) => state.crud)
 	const dispatch = useDispatch()
 
 	// function send product to localStorage
@@ -36,9 +35,7 @@ const AddForm = () => {
 							name='title'
 							value={title}
 							required
-							onChange={e =>
-								setFields({ ...fields, title: e.target.value.trim() })
-							}
+							onChange={e => setFields({ ...fields, title: e.target.value })}
 						/>
 						<input
 							type='number'
@@ -74,11 +71,11 @@ const AddForm = () => {
 						value={description}
 						required
 						onChange={e =>
-							setFields({ ...fields, description: e.target.value.trim() })
+							setFields({ ...fields, description: e.target.value })
 						}
 					></textarea>
 				</div>
-				<AddBtn btnName='Submit' />
+				<button className='add-btn'>Submit</button>
 			</form>
 		</div>
 	)

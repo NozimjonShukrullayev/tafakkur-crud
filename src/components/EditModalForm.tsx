@@ -1,87 +1,93 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ProductType } from '../interfaces'
-import { editProduct } from '../slices/createSlice'
+import { editModalRemover, editProduct } from '../slices/crudSlice'
 import { RootState } from '../store/store'
-import AddBtn from './AddBtn'
 
 const EditModalForm = () => {
-	const { editSectionToggle, currentProduct } = useSelector(
-		(state: RootState) => state.create
+	const { isEditSection, currentProduct } = useSelector(
+		(state: RootState) => state.crud
 	)
 	const [fields, setFields] = useState<ProductType>(
 		currentProduct as ProductType
 	)
+	const { title, category, price, description } = fields
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		setFields(currentProduct as ProductType)
 	}, [currentProduct])
 
-	const { title, category, price, description } = fields
-	const dispatch = useDispatch()
-
 	// function send product to localStorage
 	const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		dispatch(editProduct())
+		dispatch(editProduct(fields))
 	}
 
 	return (
-		<div className={`edit-form-box ${editSectionToggle && 'show'}`}>
-			<form onSubmit={handleEdit}>
-				<div className='form-box'>
-					<div className='form-inputs'>
-						<input
-							type='text'
-							placeholder='title'
-							name='title'
-							value={title}
-							required
-							onChange={e =>
-								setFields({ ...fields, title: e.target.value.trim() })
-							}
-						/>
-						<input
-							type='number'
-							placeholder='price'
-							name='price'
-							value={price || ''}
-							required
-							onChange={e =>
-								setFields({ ...fields, price: +e.target.value.trim() })
-							}
-						/>
+		<>
+			<div className={`edit-form-box ${isEditSection && 'show'}`}>
+				<form onSubmit={handleEdit}>
+					<div className='form-box'>
+						<button
+							className='remove-modal'
+							type='button'
+							onClick={() => dispatch(editModalRemover())}
+						>
+							x
+						</button>
+						<div className='form-inputs'>
+							<input
+								type='text'
+								placeholder='title'
+								name='title'
+								value={title}
+								required
+								onChange={e => setFields({ ...fields, title: e.target.value })}
+							/>
+							<input
+								type='number'
+								placeholder='price'
+								name='price'
+								value={price || ''}
+								required
+								onChange={e =>
+									setFields({ ...fields, price: +e.target.value.trim() })
+								}
+							/>
 
-						<input
-							list='categories'
-							type='text'
-							placeholder='category'
-							name='category'
-							value={category}
+							<input
+								list='categories'
+								type='text'
+								placeholder='category'
+								name='category'
+								value={category}
+								required
+								onChange={e =>
+									setFields({ ...fields, category: e.target.value.trim() })
+								}
+							/>
+							<datalist id='categories'>
+								<option value='mobile'></option>
+								<option value='gaming'></option>
+							</datalist>
+						</div>
+						<textarea
+							name='description'
+							id='description'
+							placeholder='description'
+							value={description}
 							required
 							onChange={e =>
-								setFields({ ...fields, category: e.target.value.trim() })
+								setFields({ ...fields, description: e.target.value })
 							}
-						/>
-						<datalist id='categories'>
-							<option value='mobile'></option>
-							<option value='gaming'></option>
-						</datalist>
+						></textarea>
 					</div>
-					<textarea
-						name='description'
-						id='description'
-						placeholder='description'
-						value={description}
-						required
-						onChange={e =>
-							setFields({ ...fields, description: e.target.value.trim() })
-						}
-					></textarea>
-				</div>
-				<AddBtn btnName='Submit' />
-			</form>
-		</div>
+					<button className='add-btn'>Submit</button>
+				</form>
+			</div>
+			<div className='modal-bg'></div>
+		</>
 	)
 }
 

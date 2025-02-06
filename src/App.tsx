@@ -1,6 +1,7 @@
-import AddBtn from './components/AddBtn'
 import AddForm from './components/AddForm'
+import AddToggleBtn from './components/AddToggleBtn'
 import EditModalForm from './components/EditModalForm'
+import ReadModal from './components/ReadModal'
 import Search from './components/Search'
 import Table from './components/Table'
 
@@ -10,11 +11,12 @@ function App() {
 			<h1>CRUD Management</h1>
 			<div className='section-header'>
 				<Search />
-				<AddBtn btnName='Add product +' />
+				<AddToggleBtn />
 			</div>
 			<div>
 				<AddForm />
 				<EditModalForm />
+				<ReadModal />
 			</div>
 			<div>
 				<Table />

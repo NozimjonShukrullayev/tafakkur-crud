@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
-import createProductReduser from '../slices/createSlice'
+import crudProductReduser from '../slices/crudSlice'
 export const store = configureStore({
-	reducer: { create: createProductReduser },
+	reducer: { crud: crudProductReduser },
 })
 
 export type RootState = ReturnType<typeof store.getState>

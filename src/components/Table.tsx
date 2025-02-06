@@ -1,10 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { DeleteIcon, EditIcon, VisibilityIcon } from '../assets'
-import { editSectionHandler } from '../slices/createSlice'
+import {
+	deleteProduct,
+	editSectionHandler,
+	readProduct,
+} from '../slices/crudSlice'
 import { RootState } from '../store/store'
 
 const Table = () => {
-	const { products } = useSelector((state: RootState) => state.create)
+	const { products } = useSelector((state: RootState) => state.crud)
 	const dispatch = useDispatch()
 
 	return (
@@ -38,8 +42,20 @@ const Table = () => {
 												dispatch(editSectionHandler(product.id as string))
 											}
 										/>
-										<img src={DeleteIcon} alt='delete-icon' />
-										<img src={VisibilityIcon} alt='visibility-icon' />
+										<img
+											src={DeleteIcon}
+											alt='delete-icon'
+											onClick={() =>
+												dispatch(deleteProduct(product.id as string))
+											}
+										/>
+										<img
+											src={VisibilityIcon}
+											alt='visibility-icon'
+											onClick={() =>
+												dispatch(readProduct(product.id as string))
+											}
+										/>
 									</td>
 								</tr>
 							))}
